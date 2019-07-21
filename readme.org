@@ -1,0 +1,39 @@
+Create a standalone .html file that shows photos and GPS recordings on
+hybrid google maps using leafletjs.
+
+* Features
+ - Shows where photos were taken on google maps. 
+ - Single standalone .html file. js/css libraries are bundled in
+   file. It still requires internet to access google maps tiles.
+ - Auto-extracts gps coordinates from locally stored photos.
+ - links to locally stored photos (so moving the .html file can break
+   it).
+ - Can also import .gpx files to show recorded GPS routes.
+
+* Usage
+#+BEGIN_EXAMPLE
+$ python map_with_photos.py `find . -iname '*.jpg'` `find . -iname '*.gpx'` 
+$ firefox map.html
+#+END_EXAMPLE
+
+* Dependencies
+Bundled in the python script and generated .html files.
+ - leaflet https://leafletjs.com/
+ - leaflet plugin marker cluster https://github.com/Leaflet/Leaflet.markercluster
+ - leaflet plugin photo https://github.com/turban/Leaflet.Photo
+ - leaflet plugin gpx https://github.com/mpetazzoni/leaflet-gpx
+
+Changes to the gpx plugin: Use inline images for marker icons. And
+keep track of number of GPS points in routes.
+
+* Bugs
+No arguments or much help. This is essentially a personal tool.
+
+Giving all photos as arguments will fail if there are too many
+photos. My system have a default max argument size of 2M. That is
+enough for me for the foreseeable future.
+
+The standalone .html requires internet and a working google maps
+API. I do not know gogle maps will work in 20 years. The google api
+path is a single place in the .html, so it is easy to change. I would
+have liked to bundle the map tiles near photos as inline images.
