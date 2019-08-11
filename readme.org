@@ -1,6 +1,9 @@
 Create a standalone .html file that shows photos and GPS recordings on
 hybrid google maps using leafletjs.
 
+* Demo
+https://danamlund.github.io/map_with_photos/demo/map.html
+
 * Features
  - Shows where photos were taken on google maps. 
  - Single standalone .html file. js/css libraries are bundled in
