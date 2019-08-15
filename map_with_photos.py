@@ -16667,7 +16667,7 @@ module.exports = exports['default'];
 
 
 
-function gpxGraph(divId, url, highlightGpxPoint) {
+function gpxGraph(divId, url, highlightGpxPoint, clickGpxPoint) {
     function parseGpxFromUrl(url, callback) {
         var req = new window.XMLHttpRequest();
         req.open('GET', url, true);
@@ -16754,12 +16754,17 @@ function gpxGraph(divId, url, highlightGpxPoint) {
         function highlightCallback(event, x, points, row, seriesName) {
             if (highlightGpxPoint) highlightGpxPoint(gpx[row]);
         }
+
+        function clickCallback(event, x, points) {
+            if (clickGpxPoint) clickGpxPoint(gpx[points[0].idx]);
+        }
         
         return new Dygraph(document.getElementById(divId), data,
                            {
                                labels: ["Date", "Elevation", "Speed(km/h)", "Distance(m)"],
                                series: { "Distance(m)": { axis: "y2" } },
-                               highlightCallback: highlightCallback
+                               highlightCallback: highlightCallback,
+                               clickCallback: clickCallback
                                // y2label: "Distance(m)",
                                // axes: { y2: { axisLabelWidth: 90 } }
                            });
@@ -16826,8 +16831,10 @@ function gpxGraph(divId, url, highlightGpxPoint) {
         if (global_gpxgraph_cleaner != null) global_gpxgraph_cleaner();
         global_gpxgraph_cleaner = gpxGraph("infoinfo", gpx._gpx,
               function(point) {
-                console.log(point);
                 global_gpxgraph_marker.setLatLng([point.lat, point.lon]);
+              },
+              function(point) {
+                mymap.panTo([point.lat, point.lon], {animate:true});
               });
       }
 
