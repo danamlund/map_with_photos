@@ -19,6 +19,7 @@
 
 import string
 import sys
+import json
 import PIL.Image
 
 template = """
@@ -16668,23 +16669,6 @@ module.exports = exports['default'];
 
 
 function gpxGraph(divId, url, highlightGpxPoint, clickGpxPoint) {
-    function parseGpxFromUrl(url, callback) {
-        var req = new window.XMLHttpRequest();
-        req.open('GET', url, true);
-        try {
-            req.overrideMimeType('text/xml'); // unsupported by IE
-        } catch(e) {}
-        req.onreadystatechange = function() {
-            if (req.readyState != 4) return;
-            if (req.status == 200) {
-                callback(parseGpxFromXml(req.responseXML));
-            } else {
-                callback(false);
-            }
-        };
-        req.send(null);
-    }
-
     function parseGpxFromXml(gpx) {
         var output = [];
         var points = gpx.getElementsByTagName("trkpt");
@@ -16770,12 +16754,9 @@ function gpxGraph(divId, url, highlightGpxPoint, clickGpxPoint) {
                            });
     }
 
-    var plot = false;
-    parseGpxFromUrl(url,
-                    function(gpx) {
-                        plot = gpxPlot(divId, gpx, highlightGpxPoint);
-                    });
-
+    let xml = new DOMParser().parseFromString(url, "text/xml");
+    let gpx = parseGpxFromXml(xml);
+    let plot = gpxPlot(divId, gpx, highlightGpxPoint);
     return function() { return plot.destroy(); };
 }
     </script>
@@ -16917,7 +16898,9 @@ def make_map_with_photos(files, outputname):
     gpxs_string = ""
     for file in files:
         if file.lower().endswith(".gpx"):
-            gpxs_string += "new L.GPX('"+file+"', {async: true}).on('click', gpxclick).addTo(mymap);"
+            with open(file, 'r') as gpxfile:
+                gpxfilecontents = json.dumps(gpxfile.read());
+                gpxs_string += "new L.GPX("+gpxfilecontents+", {async: true}).on('click', gpxclick).addTo(mymap);"
             gpxtracks_added += 1
         else:
             exif = exif_data(file);
