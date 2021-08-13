@@ -9,15 +9,24 @@ https://danamlund.github.io/map_with_photos/demo/map.html
  - Single standalone .html file. js/css libraries are bundled in
    file. It still requires internet to access google maps tiles.
  - Auto-extracts gps coordinates from locally stored photos.
- - links to locally stored photos (so moving the .html file can break
+ - Links to locally stored photos (so moving the .html file can break
    it).
  - Can also import .gpx files to show recorded GPS routes.
+ - Supports 360 degree images with redbean web server and pannellum js
+   360 viewer.
 
 * Usage
 #+BEGIN_EXAMPLE
 $ python map_with_photos.py `find . -iname '*.jpg'` `find . -iname '*.gpx'`
 $ firefox map.html
 #+END_EXAMPLE
+
+If contain 360 images, then it will output a redbean webserver running pannellum.
+#+BEGIN_EXAMPLE
+$ python map_with_photos.py `find . -iname '*.jpg'` `find . -iname '*.gpx'`
+$ ./map.bat
+#+END_EXAMPLE
+
 
 * Dependencies
 Bundled in the python script and generated .html files.
@@ -26,6 +35,8 @@ Bundled in the python script and generated .html files.
  - leaflet plugin photo https://github.com/turban/Leaflet.Photo
  - leaflet plugin gpx https://github.com/mpetazzoni/leaflet-gpx
  - dygraph http://dygraphs.com/
+ - redbean https://redbean.dev/
+ - pannellum https://pannellum.org/
 
 Changes to the gpx plugin: Use inline images for marker icons. And
 keep track of number of GPS points in routes.
@@ -38,6 +49,6 @@ photos. My system have a default max argument size of 2M. That is
 enough for me for the foreseeable future.
 
 The standalone .html requires internet and a working google maps
-API. I do not know gogle maps will work in 20 years. The google api
-path is a single place in the .html, so it is easy to change. I would
-have liked to bundle the map tiles near photos as inline images.
+API. I do not know if google maps will work in 20 years. The google
+api path is a single place in the .html, so it is easy to change. I
+would have liked to bundle the map tiles near photos as inline images.
