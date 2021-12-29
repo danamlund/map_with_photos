@@ -22547,24 +22547,38 @@ def exif_data(file):
 
     gpstag_latitude_ref = gpstag[1]
     gpstag_latitude = gpstag[2]
-    gpstag_latitude_degrees = gpstag_latitude[0][0] / gpstag_latitude[0][1];
-    gpstag_latitude_minutes = gpstag_latitude[1][0] / gpstag_latitude[1][1];
-    gpstag_latitude_seconds = gpstag_latitude[2][0] / gpstag_latitude[2][1];
+    try:
+        gpstag_latitude_degrees = float(gpstag_latitude[0]);
+        gpstag_latitude_minutes = float(gpstag_latitude[1]);
+        gpstag_latitude_seconds = float(gpstag_latitude[2]);
+    except:
+        gpstag_latitude_degrees = gpstag_latitude[0][0] / gpstag_latitude[0][1];
+        gpstag_latitude_minutes = gpstag_latitude[1][0] / gpstag_latitude[1][1];
+        gpstag_latitude_seconds = gpstag_latitude[2][0] / gpstag_latitude[2][1];
     latitude = dms2dd(gpstag_latitude_degrees, gpstag_latitude_minutes,
                       gpstag_latitude_seconds, gpstag_latitude_ref);
     
     gpstag_longtitude = gpstag[4]
     gpstag_longtitude_ref = gpstag[3]
-    gpstag_longtitude_degrees = gpstag_longtitude[0][0] / gpstag_longtitude[0][1];
-    gpstag_longtitude_minutes = gpstag_longtitude[1][0] / gpstag_longtitude[1][1];
-    gpstag_longtitude_seconds = gpstag_longtitude[2][0] / gpstag_longtitude[2][1];
+    try:
+        gpstag_longtitude_degrees = gpstag_longtitude[0];
+        gpstag_longtitude_minutes = gpstag_longtitude[1];
+        gpstag_longtitude_seconds = gpstag_longtitude[2];
+    except:
+        gpstag_longtitude_degrees = gpstag_longtitude[0][0] / gpstag_longtitude[0][1];
+        gpstag_longtitude_minutes = gpstag_longtitude[1][0] / gpstag_longtitude[1][1];
+        gpstag_longtitude_seconds = gpstag_longtitude[2][0] / gpstag_longtitude[2][1];
+        
     longtitude = dms2dd(gpstag_longtitude_degrees, gpstag_longtitude_minutes,
                         gpstag_longtitude_seconds, gpstag_longtitude_ref);
 
     output = {"lat":latitude, "lng":longtitude}
 
     if 5 in gpstag and 6 in gpstag:
-        altitude = gpstag[6][0] / gpstag[6][1]
+        try:
+            altitude = float(gpstag[6])
+        except:
+            altitude = gpstag[6][0] / gpstag[6][1]
         above_sea_level = gpstag[5]
         if above_sea_level == 1:
             altitude *= -1
